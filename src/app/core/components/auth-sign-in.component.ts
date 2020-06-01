@@ -11,7 +11,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
         [(ngModel)]="selectedProvider"
         class="select"
         name="provider"
-        (change)="providerChanged($event)"
+        (change)="providerChanged()"
       >
         <option *ngFor="let p of providers" [value]="p">{{ p }}</option>
       </select>
