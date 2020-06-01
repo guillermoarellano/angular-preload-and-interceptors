@@ -1,6 +1,6 @@
 # Tour of Heroes - Angular Preload and Http Interceptors Demo
 
-This project was created to help represent a fundamental app written with Angular that demonstrates preload strategies, guards, and http interceptors. The heroes and villains theme is used throughout the app.
+This project was created to help represent a fundamental app written with Angular that demonstrates preload strategies, guards, and http interceptors. The Mary Poppins theme is used in the app.
 
 by [John Papa](http://twitter.com/john_papa)
 
@@ -13,10 +13,16 @@ by [John Papa](http://twitter.com/john_papa)
    cd tour
    ```
 
-1. Install the npm packages
+1. Install packages
 
    ```bash
-   npm run quick
+   npm install
+   ```
+
+1. Run it
+
+   ```bash
+   npm run full-stack
    ```
 
 ## What's in the App
@@ -88,12 +94,12 @@ export const httpInterceptorProviders = [
   { provide: HTTP_INTERCEPTORS, useClass: CSRFInterceptor, multi: true },
   /**
    *  Log headers:
-   *    Must come after the headers are stuffed.
+   *    Must come after the headers are stuffed, so we can log the headers.
    */
   { provide: HTTP_INTERCEPTORS, useClass: LogHeadersInterceptor, multi: true },
   /**
    *  Busy:
-   *    Should be first so it can turn on first, and off last.
+   *    Should so it can turn on before the http requests, and off after the requests.
    */
   { provide: HTTP_INTERCEPTORS, useClass: BusyInterceptor, multi: true },
   /**
