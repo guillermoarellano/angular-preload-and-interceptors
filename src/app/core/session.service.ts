@@ -19,7 +19,8 @@ export class SessionService {
     return !!this.userInfo?.userId;
   }
 
-  readOnly = false;
+  readOnly = false; // You could set this based on user roles
+  
   sessionState$ = this.sessionStateSubject.asObservable();
 
   async checkAuth() {
