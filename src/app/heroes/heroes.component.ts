@@ -12,6 +12,7 @@ import { HeroService } from './hero.service';
         (add)="enableAddMode()"
         (refresh)="getHeroes()"
       ></app-list-header>
+
       <div class="columns is-multiline is-variable">
         <div class="column is-8" *ngIf="heroes$ | async as heroes">
           <app-hero-list
@@ -37,7 +38,7 @@ import { HeroService } from './hero.service';
         (handleYes)="deleteHero()"
       ></app-modal>
     </div>
-  `
+  `,
 })
 export class HeroesComponent implements OnInit {
   selected: Hero;

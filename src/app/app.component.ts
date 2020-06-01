@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BusyService } from './core/busy.service';
 import { delay, observeOn } from 'rxjs/operators';
 import { asapScheduler } from 'rxjs';
+import { SessionService } from './core';
 
 @Component({
   selector: 'app-root',
@@ -22,10 +23,10 @@ import { asapScheduler } from 'rxjs';
     </div>
   `,
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   busy = false;
 
-  constructor(private busyService: BusyService) {
+  constructor(private busyService: BusyService, private sessionService: SessionService) {
     // busyService.busyState$.pipe(delay(0)).subscribe((bs) => (this.busy = bs.isBusy));
 
     busyService.busyState$
@@ -33,5 +34,9 @@ export class AppComponent {
       // ExpressionChangedAfterItHasBeenCheckedError
       .pipe(observeOn(asapScheduler))
       .subscribe((bs) => (this.busy = bs.isBusy));
+  }
+
+  async ngOnInit() {
+    await this.sessionService.checkAuth();
   }
 }
