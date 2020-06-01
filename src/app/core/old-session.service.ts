@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { UserInfo } from './model';
+import { User } from './model';
 import { BehaviorSubject } from 'rxjs';
 
 export interface SessionState {
@@ -17,7 +17,7 @@ export class SessionService {
   private _isLoggedIn = false;
   private sessionStateSubject = new BehaviorSubject<SessionState>({
     loggedIn: false,
-    message: notSignedInMessage,
+    message: notSignedInMessage
   });
   accessToken: string;
 
@@ -33,12 +33,12 @@ export class SessionService {
   signin(email: string, password: string) {
     const root = environment.API;
     const signinUrl = `${root}/signin/`;
-    const body: Partial<UserInfo> = {
-      // email, // 'john@contoso.com',
-      // password, // '1234'
+    const body: Partial<User> = {
+      email, // 'john@contoso.com',
+      password // '1234'
     };
     return this.http.post<{ accessToken: string }>(signinUrl, body).pipe(
-      map((res) => {
+      map(res => {
         if (res?.accessToken) {
           const message = `Welcome ${email}`;
           this.accessToken = res.accessToken;
@@ -53,13 +53,13 @@ export class SessionService {
     );
   }
 
-  // refreshToken() {
-  //   // TODO: implement a refresh
-  // }
+  refreshToken() {
+    // TODO: implement a refresh
+  }
 
   logout() {
     this.accessToken = null;
-    //   this.sessionStateSubject.next({ loggedIn: false, message: notSignedInMessage });
+    this.sessionStateSubject.next({ loggedIn: false, message: notSignedInMessage });
     this._isLoggedIn = false;
   }
 }

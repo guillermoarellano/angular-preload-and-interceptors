@@ -1,8 +1,9 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { SessionService } from '../session.service';
+import { UserInfo } from '../model/user-info';
 
 @Component({
   template: `
@@ -14,90 +15,81 @@ import { SessionService } from '../session.service';
       </header>
       <div class="card-content">
         <div class="content">
-          <div class="field">
-            <label class="label" for="email">
-              email
-            </label>
-            <input
-              name="email"
-              class="input"
-              type="email"
-              [(ngModel)]="email"
-              placeholder="e.g. john@contoso.com"
-            />
+          <div class="menu-list auth">
+            <ng-container *ngIf="!userInfo">
+              <ng-container *ngFor="let provider of providers">
+                <app-auth-login [provider]="provider"></app-auth-login>
+              </ng-container>
+            </ng-container>
+            <app-auth-logout *ngIf="userInfo"></app-auth-logout>
           </div>
-          <div class="field">
-            <label class="label" for="password">
-              Password
-            </label>
-            <input
-              name="password"
-              class="input"
-              type="password"
-              [(ngModel)]="password"
-              placeholder="1234"
-            />
+          <div class="user" *ngIf="userInfo">
+            <p>Welcome</p>
+            <p>{{ userInfo?.userDetails }}</p>
+            <p>{{ userInfo?.identityProvider }}</p>
           </div>
         </div>
       </div>
-      <footer class="card-footer ">
-        <app-button-footer
-          class="card-footer-item"
-          [className]="'cancel-button'"
-          [iconClasses]="'fas fa-sign-out-alt'"
-          (clicked)="logout()"
-          label="Logout"
-        ></app-button-footer>
-        <app-button-footer
-          class="card-footer-item"
-          [className]="'save-button'"
-          [iconClasses]="'fas fa-sign-in-alt'"
-          (clicked)="signin()"
-          label="Sign in"
-        ></app-button-footer>
-      </footer>
     </div>
-  `
+  `,
 })
-export class SignInComponent implements OnDestroy {
+export class SignInComponent implements OnInit {
   private subs = new Subscription();
-  email: string = 'john@contoso.com';
-  password: string = '1234';
+  // email: string = 'john@contoso.com';
+  // password: string = '1234';
+  providers = ['twitter', 'github', 'aad', 'google', 'facebook'];
+  userInfo: UserInfo;
 
-  constructor(
-    private sessionService: SessionService,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  // constructor(
+  //   private sessionService: SessionService,
+  //   private route: ActivatedRoute,
+  //   private router: Router
+  // ) {}
 
-  public get isLoggedIn(): boolean {
-    return this.sessionService.isLoggedIn;
+  async ngOnInit() {
+    this.userInfo = await this.getUserInfo();
   }
 
-  signin() {
-    this.subs.add(
-      this.sessionService
-        .signin(this.email, this.password)
-        .pipe(
-          mergeMap(result => this.route.queryParams),
-          map(qp => qp['redirectTo'])
-        )
-        .subscribe(redirectTo => {
-          if (this.sessionService.isLoggedIn) {
-            console.info(`Successfully logged in`);
-            const url = redirectTo ? [redirectTo] : ['/heroes'];
-            this.router.navigate(url);
-          }
-        })
-    );
+  // public get isLoggedIn(): boolean {
+  //   return this.sessionService.isLoggedIn;
+  // }
+
+  async getUserInfo() {
+    try {
+      const response = await fetch('/.auth/me');
+      const payload = await response.json();
+      const { clientPrincipal } = payload;
+      return clientPrincipal;
+    } catch (error) {
+      console.error('No profile could be found');
+      return undefined;
+    }
   }
 
-  logout() {
-    this.sessionService.logout();
-    console.info(`Successfully logged out`);
-  }
+  // signin() {
+  //   this.subs.add(
+  //     this.sessionService
+  //       .signin(this.email, this.password)
+  //       .pipe(
+  //         mergeMap((result) => this.route.queryParams),
+  //         map((qp) => qp['redirectTo'])
+  //       )
+  //       .subscribe((redirectTo) => {
+  //         if (this.sessionService.isLoggedIn) {
+  //           console.info(`Successfully logged in`);
+  //           const url = redirectTo ? [redirectTo] : ['/heroes'];
+  //           this.router.navigate(url);
+  //         }
+  //       })
+  //   );
+  // }
 
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
+  // logout() {
+  //   this.sessionService.logout();
+  //   console.info(`Successfully logged out`);
+  // }
+
+  // ngOnDestroy() {
+  //   this.subs.unsubscribe();
+  // }
 }
