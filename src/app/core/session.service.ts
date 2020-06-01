@@ -27,7 +27,7 @@ export class SessionService {
   //auth/login/twitter?session_mode=token
 
   public get isLoggedIn(): boolean {
-    return !!this.userInfo.userId;
+    return !!this.userInfo?.userId;
     // return this._isLoggedIn;
   }
 
