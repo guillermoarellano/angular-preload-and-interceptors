@@ -5,12 +5,15 @@ import { SessionService, SessionState } from '../session.service';
 @Component({
   template: `
     <div class="card signin">
-      <header class="card-header">
-        <p class="card-header-title">
-          Sign In
-        </p>
-      </header>
       <ng-container *ngIf="sessionState$ | async as sessionState">
+        <header class="card-header">
+          <p class="card-header-title" *ngIf="!sessionState.userInfo">
+            SIGN IN
+          </p>
+          <p class="card-header-title" *ngIf="sessionState.userInfo">
+            SIGN OUT
+          </p>
+        </header>
         <div class="card-content">
           <div class="content">
             <div>
