@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
-import { map, mergeMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 import { SessionService, SessionState } from '../session.service';
-import { UserInfo } from '../model/user-info';
 
 @Component({
   template: `
@@ -13,80 +10,64 @@ import { UserInfo } from '../model/user-info';
           Sign In
         </p>
       </header>
-      <div class="card-content">
-        <ng-container *ngIf="sessionState$ | async as sessionState">
+      <ng-container *ngIf="sessionState$ | async as sessionState">
+        <div class="card-content">
           <div class="content">
-            <div class="menu-list auth">
+            <div>
               <ng-container *ngIf="!sessionState.userInfo">
-                <div class="field">
-                  <label class="label" for="provider">
-                    auth provider
-                  </label>
-                  <select [(ngModel)]="selectedProvider" class="select" name="provider">
-                    <option *ngFor="let p of providers" [value]="p">{{ p }}</option>
-                  </select>
-                </div>
-                <ng-container *ngFor="let provider of providers">
-                  <app-auth-login [provider]="provider"></app-auth-login>
-                </ng-container>
+                <app-auth-sign-in
+                  [providers]="providers"
+                  [selectedProvider]="selectedProvider"
+                  (providerSelected)="providerSelected($event)"
+                >
+                </app-auth-sign-in>
               </ng-container>
-              <app-auth-logout *ngIf="sessionState.userInfo"></app-auth-logout>
-            </div>
-            <div class="user" *ngIf="sessionState.userInfo">
-              <p>Welcome</p>
-              <p>{{ sessionState.userInfo?.userDetails }}</p>
-              <p>{{ sessionState.userInfo?.identityProvider }}</p>
             </div>
           </div>
-        </ng-container>
-      </div>
-      <footer class="card-footer ">
-        <app-button-footer
-          class="card-footer-item"
-          [className]="'cancel-button'"
-          [iconClasses]="'fas fa-undo'"
-          (clicked)="cancel()"
-          label="Cancel"
-        ></app-button-footer>
-        <app-button-footer
-          class="card-footer-item"
-          [className]="'save-button'"
-          [iconClasses]="'fa fa-sign-in'"
-          (clicked)="login()"
-          label="Login"
-        ></app-button-footer>
-      </footer>
+        </div>
+        <footer class="card-footer ">
+          <app-button-footer
+            class="card-footer-item"
+            [className]="'cancel-button'"
+            [iconClasses]="'fas fa-undo'"
+            (clicked)="cancel()"
+            label="Cancel"
+          ></app-button-footer>
+          <app-button-footer
+            *ngIf="!sessionState.userInfo"
+            class="card-footer-item"
+            [className]="'save-button'"
+            [iconClasses]="'fa fa-sign-in'"
+            (clicked)="login()"
+            label="Login"
+          ></app-button-footer>
+          <app-button-footer
+            *ngIf="sessionState.userInfo"
+            class="card-footer-item"
+            [className]="'save-button'"
+            [iconClasses]="'fa fa-sign-out'"
+            (clicked)="logout()"
+            label="Logout"
+          ></app-button-footer>
+        </footer>
+      </ng-container>
     </div>
   `,
 })
 export class SignInComponent implements OnInit {
-  // private subs = new Subscription();
   public sessionState$: Observable<SessionState>;
-  // email: string = 'john@contoso.com';
-  // password: string = '1234';
   providers = ['twitter', 'github', 'aad', 'google', 'facebook'];
-  selectedProvider = this.providers[0];
-  // userInfo: UserInfo;
+  selectedProvider: string;
 
   constructor(private sessionService: SessionService) {
     this.sessionState$ = this.sessionService.sessionState$;
-    // this.sessionState$.pipe(
-    //   // mergeMap((result) => this.route.queryParams),
-    //   map((ui) => this.userInfo = ui)
-    // );
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.selectedProvider = this.providers[0];
+  }
 
   login() {
-    this.goAuth();
-  }
-
-  cancel() {
-    window.history.back();
-  }
-
-  goAuth() {
     if (this.selectedProvider) {
       const { pathname } = window.location;
       const redirect = `post_login_redirect_uri=${pathname}`;
@@ -95,41 +76,18 @@ export class SignInComponent implements OnInit {
     }
   }
 
-  // private route: ActivatedRoute,
-  // private router: Router
+  logout() {
+    const { pathname } = window.location;
+    const redirect = `post_logout_redirect_uri=${pathname}`;
+    const url = `/.auth/logout?${redirect}`;
+    window.location.href = url;
+  }
 
-  // async ngOnInit() {
-  //   this.userInfo = await this.getUserInfo();
-  // }
+  cancel() {
+    window.history.back();
+  }
 
-  // public get isLoggedIn(): boolean {
-  //   return this.sessionService.isLoggedIn;
-  // }
-
-  // signin() {
-  //   this.subs.add(
-  //     this.sessionService
-  //       .signin(this.email, this.password)
-  //       .pipe(
-  //         mergeMap((result) => this.route.queryParams),
-  //         map((qp) => qp['redirectTo'])
-  //       )
-  //       .subscribe((redirectTo) => {
-  //         if (this.sessionService.isLoggedIn) {
-  //           console.info(`Successfully logged in`);
-  //           const url = redirectTo ? [redirectTo] : ['/heroes'];
-  //           this.router.navigate(url);
-  //         }
-  //       })
-  //   );
-  // }
-
-  // logout() {
-  //   this.sessionService.logout();
-  //   console.info(`Successfully logged out`);
-  // }
-
-  // ngOnDestroy() {
-  //   this.subs.unsubscribe();
-  // }
+  providerSelected(value) {
+    this.selectedProvider = value;
+  }
 }

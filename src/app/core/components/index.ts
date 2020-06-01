@@ -7,8 +7,7 @@ export * from './not-found.component';
 export * from './sign-in.component';
 
 import { AuthFailedComponent } from './auth-failed.component';
-import { AuthLoginComponent } from './auth-login.component';
-import { AuthLogoutComponent } from './auth-logout.component';
+import { AuthSignInComponent } from './auth-sign-in.component';
 import { HeaderBarBrandComponent } from './header-bar-brand.component';
 import { HeaderBarLinksComponent } from './header-bar-links.component';
 import { HeaderBarComponent } from './header-bar.component';
@@ -18,8 +17,7 @@ import { SignInComponent } from './sign-in.component';
 
 export const declarations = [
   AuthFailedComponent,
-  AuthLoginComponent,
-  AuthLogoutComponent,
+  AuthSignInComponent,
   NavComponent,
   HeaderBarComponent,
   HeaderBarBrandComponent,
