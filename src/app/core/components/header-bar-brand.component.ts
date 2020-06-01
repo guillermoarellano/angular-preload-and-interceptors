@@ -37,8 +37,9 @@ export class HeaderBarBrandComponent implements OnDestroy {
       this.sessionService.sessionState$.subscribe((state) => {
         if (state?.userInfo?.userDetails) {
           this.signinState = `${state.userInfo.userDetails} (${state.userInfo.identityProvider})`;
+        } else {
+          this.signinState = 'Not signed in';
         }
-        this.signinState = 'Not signed in';
         return this.signinState;
       })
     );
