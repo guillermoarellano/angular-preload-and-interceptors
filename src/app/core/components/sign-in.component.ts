@@ -18,6 +18,14 @@ import { UserInfo } from '../model/user-info';
           <div class="content">
             <div class="menu-list auth">
               <ng-container *ngIf="!sessionState.userInfo">
+                <div class="field">
+                  <label class="label" for="provider">
+                    auth provider
+                  </label>
+                  <select [(ngModel)]="selectedProvider" class="select" name="provider">
+                    <option *ngFor="let p of providers" [value]="p">{{ p }}</option>
+                  </select>
+                </div>
                 <ng-container *ngFor="let provider of providers">
                   <app-auth-login [provider]="provider"></app-auth-login>
                 </ng-container>
@@ -32,6 +40,22 @@ import { UserInfo } from '../model/user-info';
           </div>
         </ng-container>
       </div>
+      <footer class="card-footer ">
+        <app-button-footer
+          class="card-footer-item"
+          [className]="'cancel-button'"
+          [iconClasses]="'fas fa-undo'"
+          (clicked)="cancel()"
+          label="Cancel"
+        ></app-button-footer>
+        <app-button-footer
+          class="card-footer-item"
+          [className]="'save-button'"
+          [iconClasses]="'fa fa-sign-in'"
+          (clicked)="login()"
+          label="Login"
+        ></app-button-footer>
+      </footer>
     </div>
   `,
 })
@@ -41,6 +65,7 @@ export class SignInComponent implements OnInit {
   // email: string = 'john@contoso.com';
   // password: string = '1234';
   providers = ['twitter', 'github', 'aad', 'google', 'facebook'];
+  selectedProvider = this.providers[0];
   // userInfo: UserInfo;
 
   constructor(private sessionService: SessionService) {
@@ -50,7 +75,26 @@ export class SignInComponent implements OnInit {
     //   map((ui) => this.userInfo = ui)
     // );
   }
+
   ngOnInit(): void {}
+
+  login() {
+    this.goAuth();
+  }
+
+  cancel() {
+    window.history.back();
+  }
+
+  goAuth() {
+    if (this.selectedProvider) {
+      const { pathname } = window.location;
+      const redirect = `post_login_redirect_uri=${pathname}`;
+      const url = `/.auth/login/${this.selectedProvider}?${redirect}`;
+      window.location.href = url;
+    }
+  }
+
   // private route: ActivatedRoute,
   // private router: Router
 
