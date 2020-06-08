@@ -77,4 +77,9 @@ const getHeroes = () => {
   return data.heroes;
 };
 
-module.exports = { addHero, updateHero, deleteHero, getHeroes };
+const getHeroById = (id) => {
+  const index = data.heroes.findIndex((h) => id === h.id);
+  return data.heroes[index];
+};
+
+module.exports = { addHero, updateHero, deleteHero, getHeroes, getHeroById };
