@@ -1,53 +1,51 @@
 const data = {
-  heroes: {
-    data: [
-      {
-        id: 'HeroMaryPoppins',
-        name: 'Mary Poppins',
-        description: 'practically perfect in every way',
-        quotes: [
-          {
-            id: 1,
-            quote: 'supercalifragilisticexpealidicious',
-          },
-          {
-            id: 2,
-            quote: 'spit spot',
-          },
-        ],
-      },
-      {
-        id: 'HeroBert',
-        name: 'Bert',
-        description: 'Chimney sweep, sidewalk chalk artist, lamp lighter, and unsung hero',
-      },
-      {
-        id: 'HeroGeorge',
-        name: 'George W. Banks',
-        description: 'Works at Dawes Tomes Mousley Grubbs Fidelity Fiduciary Bank',
-      },
-      {
-        id: 'HeroWinnifred',
-        name: 'Winnifred Banks',
-        description: "Active in the Women's Votes suffragette movement",
-      },
-      {
-        id: 'HeroNanna',
-        name: 'Katie Nanna',
-        description: 'Way underappreciated',
-      },
-      {
-        id: 'HeroAdmiral',
-        name: 'Admiral Boom',
-        description: 'Fires canon. We need more of him',
-      },
-      {
-        id: 'HeroUncle',
-        name: 'Uncle Albert',
-        description: 'He loves to laugh ...',
-      },
-    ],
-  },
+  heroes: [
+    {
+      id: 10,
+      name: 'Mary Poppins',
+      description: 'practically perfect in every way',
+      quotes: [
+        {
+          id: 1,
+          quote: 'supercalifragilisticexpealidicious',
+        },
+        {
+          id: 2,
+          quote: 'spit spot',
+        },
+      ],
+    },
+    {
+      id: 11,
+      name: 'Bert',
+      description: 'Chimney sweep, sidewalk chalk artist, lamp lighter, and unsung hero',
+    },
+    {
+      id: 12,
+      name: 'George W. Banks',
+      description: 'Works at Dawes Tomes Mousley Grubbs Fidelity Fiduciary Bank',
+    },
+    {
+      id: 13,
+      name: 'Winnifred Banks',
+      description: "Active in the Women's Votes suffragette movement",
+    },
+    {
+      id: 14,
+      name: 'Katie Nanna',
+      description: 'Way underappreciated',
+    },
+    {
+      id: 15,
+      name: 'Admiral Boom',
+      description: 'Fires canon. We need more of him',
+    },
+    {
+      id: 16,
+      name: 'Uncle Albert',
+      description: 'He loves to laugh ...',
+    },
+  ],
 };
 
 const getRandomInt = () => {

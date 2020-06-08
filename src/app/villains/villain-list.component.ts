@@ -36,14 +36,14 @@ import { Villain } from '../core';
       </li>
     </ul>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VillainListComponent {
   @Input() villains: Villain[];
   @Output() deleted = new EventEmitter<Villain>();
   @Output() selected = new EventEmitter<Villain>();
 
-  trackByVillain(index: number, villain: Villain): string {
+  trackByVillain(index: number, villain: Villain): number {
     return villain.id;
   }
 

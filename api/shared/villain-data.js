@@ -1,18 +1,16 @@
 const data = {
-  villains: {
-    data: [
-      {
-        id: 'VillainDawesSr',
-        name: 'Mr. Dawes Sr.',
-        description: 'I once knew a main with a wooden leg named Smith',
-      },
-      {
-        id: 'VillainWilkins',
-        name: 'Mr Wilkins',
-        description: "What's up with these bank characters?",
-      },
-    ],
-  },
+  villains: [
+    {
+      id: 50,
+      name: 'Mr. Dawes Sr.',
+      description: 'I once knew a main with a wooden leg named Smith',
+    },
+    {
+      id: 51,
+      name: 'Mr Wilkins',
+      description: "What's up with these bank characters?",
+    },
+  ],
 };
 
 const getRandomInt = () => {
